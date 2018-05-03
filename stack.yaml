@@ -1,0 +1,25 @@
+flags:
+  generic-deriving:
+    base-4-9: false
+packages:
+- .
+extra-deps:
+- generic-deriving-1.12.1
+- hashable-1.2.7.0
+- mtl-2.2.2
+- primitive-0.6.3.0
+- safe-0.3.17
+- semigroups-0.18.4
+- syb-0.7
+- tagged-0.8.5
+- text-1.2.3.0
+- th-desugar-1.8
+- th-expand-syns-0.4.4.0
+- th-lift-0.7.8
+- th-lift-instances-0.1.11
+- th-orphans-0.13.5
+- th-reify-many-0.1.8
+- transformers-compat-0.6.1.4
+- unordered-containers-0.2.9.0
+- vector-0.12.0.1
+resolver: ghc-7.10.3

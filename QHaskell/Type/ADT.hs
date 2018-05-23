@@ -11,6 +11,7 @@ data Typ =
   | Arr Typ Typ
   | Tpl Typ Typ
   | TVr Nat
+  | May Typ
 
 deriving instance Eq   Typ
 deriving instance Show Typ

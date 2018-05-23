@@ -1,10 +1,10 @@
 module QHaskell.Expression.ADTValue
     (Exp
-    ,conI,conB,conF,prm,var,abs,app,cnd,tpl,fst,snd,leT
+    ,conI,conB,conF,prm,var,abs,app,cnd,tpl,fst,snd,leT,may
     ,typ,int,mem,fix
     ,Lft(..),CoLft(..)) where
 
-import QHaskell.MyPrelude hiding (abs,fst,snd,tpl,cnd,fix)
+import QHaskell.MyPrelude hiding (abs,fst,snd,tpl,cnd,fix,may)
 import qualified QHaskell.MyPrelude as MP
 import qualified QHaskell.Type.ADT as TA
 

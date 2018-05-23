@@ -28,6 +28,8 @@ instance Cnv (TA.Typ) (ExsSin TG.Typ) where
   cnv (TA.Tpl tf ts) = do ExsSin tf' <- cnv tf
                           ExsSin ts' <- cnv ts
                           return (ExsSin (TG.Tpl tf' ts'))
+  cnv (TA.May tm)    = do ExsSin tm' <- cnv tm
+                          return (ExsSin (TG.May tm'))
   cnv (TA.TVr n)     = do ExsSin n' <- cnv (n , ())
                           return (ExsSin (TG.TVr n'))
 
@@ -42,6 +44,7 @@ instance Cnv (TA.Typ , r) (HR.Typ (HR.EnvFld '[])) where
     TA.Arr ta tb -> HR.Arr <$> cnvWth r ta <*> cnvWth r tb
     TA.Tpl tf ts -> HR.Tpl <$> cnvWth r tf <*> cnvWth r ts
     TA.TVr n     -> pure (HR.Mta n)
+    TA.May tm    -> HR.May <$> cnvWth r tm
 
 instance Cnv (TA.Typ , r) TH.Type where
   cnv (th , r) = case th of
@@ -68,6 +71,7 @@ instance Cnv (TG.Typ a , r) TA.Typ where
     TG.Arr ta tb -> TA.Arr <$> cnvWth r ta <*> cnvWth r tb
     TG.Tpl tf ts -> TA.Tpl <$> cnvWth r tf <*> cnvWth r ts
     TG.TVr n     -> TA.TVr <$> cnvWth r n
+    TG.May tm    -> TA.May <$> cnvWth r tm
 
 instance Cnv (TG.Typ a , r) TH.Type where
   cnv (t , r) = do t' :: TA.Typ <- cnv (t , r)
@@ -84,6 +88,7 @@ instance Cnv (HR.Typ (HR.EnvFld '[]) , r) TA.Typ where
     HR.Flt       -> pure TA.Flt
     HR.Arr ta tb -> TA.Arr <$> cnvWth r ta <*> cnvWth r tb
     HR.Tpl tf ts -> TA.Tpl <$> cnvWth r tf <*> cnvWth r ts
+    HR.May tm    -> TA.May <$> cnvWth r tm
     _            -> fail ("Type Error:\n" ++ show th)
 
 instance ts ~ ts' => Cnv (TG.Typ ts, r) (TG.Typ ts') where

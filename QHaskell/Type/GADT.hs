@@ -12,8 +12,8 @@ data Typ :: * -> * where
   Flt :: Typ Float
   Arr :: Typ ta -> Typ tb -> Typ (ta -> tb)
   Tpl :: Typ tf -> Typ ts -> Typ (tf , ts)
-  TVr :: Nat a  -> Typ (TVr a)
   May :: Typ t  -> Typ (Maybe t)
+  TVr :: Nat a  -> Typ (TVr a)
 
 deriving instance Show (Typ t)
 
@@ -51,6 +51,8 @@ instance EqlSin Typ where
   eqlSin (Tpl tf ts) (Tpl tf' ts') = do Rfl <- eqlSin tf tf'
                                         Rfl <- eqlSin ts ts'
                                         return Rfl
+  eqlSin (May tm)    (May tm')     = do Rfl <- eqlSin tm tm'
+                                        return Rfl
   eqlSin (TVr n)     (TVr n')      = do Rfl <- eqlSin n n'
                                         return Rfl
   eqlSin a            a'            = fail ("Type Error!\n"++
@@ -65,6 +67,8 @@ instance GetPrfHasSin Typ where
       (PrfHasSin , PrfHasSin) -> PrfHasSin
     Tpl tf ts -> case (getPrfHasSin tf , getPrfHasSin ts) of
       (PrfHasSin , PrfHasSin) -> PrfHasSin
+    May tm    -> case (getPrfHasSin tm) of
+      PrfHasSin -> PrfHasSin
     TVr n     -> case getPrfHasSin n of
       PrfHasSin -> PrfHasSin
 

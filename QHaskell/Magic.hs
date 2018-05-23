@@ -3,6 +3,7 @@
 
 module QHaskell.Magic where
 
+import Prelude (error)
 import QHaskell.MyPrelude hiding (lookup)
 import QHaskell.Singleton
 import QHaskell.Nat.ADT hiding (add)
@@ -114,6 +115,7 @@ subs Emp a          = a
 subs s@(Ext _ _) (TG.TVr x)   = case_Subs x (lookup x s)
 subs s@(Ext _ _) (TG.Arr a b) = TG.Arr (subs s a) (subs s b)
 subs s@(Ext _ _) (TG.Tpl a b) = TG.Tpl (subs s a) (subs s b)
+subs s@(Ext _ _) (TG.May a)   = TG.May (subs s a)
 subs (Ext _ _)   TG.Wrd       = TG.Wrd
 subs (Ext _ _)   TG.Bol       = TG.Bol
 subs (Ext _ _)   TG.Flt       = TG.Flt
@@ -146,6 +148,7 @@ mgu :: forall a a'. TG.Typ a -> TG.Typ a' ->
 mgu (TG.TVr x)   a'             = SJust (Ext (SPair x a')  Emp)
 mgu (TG.Arr a b) (TG.Arr a' b') = case_Mgu b b' (mgu a a')
 mgu (TG.Tpl a b) (TG.Tpl a' b') = case_Mgu b b' (mgu a a')
+mgu (TG.May a)   (TG.May a')    = mgu a a'
 mgu TG.Wrd       TG.Wrd         = SJust Emp
 mgu TG.Bol       TG.Bol         = SJust Emp
 mgu TG.Flt       TG.Flt         = SJust Emp
@@ -156,7 +159,7 @@ mgu _            _              = case obvious :: Mgu a a' :~:
 case_Mgu :: TG.Typ b -> TG.Typ b' -> SMaybe (Env (SPair NG.Nat TG.Typ)) s ->
             SMaybe (Env (SPair NG.Nat TG.Typ)) (Case_Mgu b b' s)
 case_Mgu b b' (SJust s) = fmapAppend s (mgu (subs s b) b')
-case_Mgu _ _  SNothing  = SNothing
+case_Mgu _ _  SNothing  = error SNothing
 
 fmapAppend :: Env f xs -> SMaybe (Env f) mys ->
               SMaybe (Env f) (FMapAppend xs mys)

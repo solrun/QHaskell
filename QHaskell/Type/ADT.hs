@@ -10,8 +10,8 @@ data Typ =
   | Flt
   | Arr Typ Typ
   | Tpl Typ Typ
-  | TVr Nat
   | May Typ
+  | TVr Nat
 
 deriving instance Eq   Typ
 deriving instance Show Typ

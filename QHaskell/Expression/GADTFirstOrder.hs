@@ -26,3 +26,7 @@ data Exp :: [*] -> [*] -> * -> * where
   Tag  :: String -> Exp s g a -> Exp s g a
   Mem  :: Exp s g a -> Exp s g a
   Fix  :: Exp s g (a -> a) -> Exp s g a
+  Non  :: Exp s g (Maybe a)
+  Som  :: Type a => Exp s g a -> Exp s g (Maybe a)
+  May  :: Type a => Exp s g (Maybe a) ->
+          Exp s g b -> Exp s g (a -> b) -> Exp s g b

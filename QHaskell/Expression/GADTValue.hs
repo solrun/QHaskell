@@ -1,6 +1,6 @@
 module QHaskell.Expression.GADTValue
     (Exp(..)
-    ,conI,conB,conF,prm,var,abs,app,cnd,tpl,fst,snd,leT
+    ,conI,conB,conF,prm,var,abs,app,cnd,tpl,fst,snd,leT,may
     ,tag,int,mem,fix
     ,getTrm) where
 
@@ -91,3 +91,13 @@ mem = id
 
 fix :: Exp (a -> a) -> Exp a
 fix = prm1 MP.fix
+
+non  :: Exp (Maybe a)
+non  = prm0 Nothing
+
+som  :: Exp a -> Exp (Maybe a)
+som  = prm1 Just
+
+may  :: Exp (Maybe a) ->
+        Exp b -> Exp (a -> b) -> Exp b
+may  = prm3 MP.may

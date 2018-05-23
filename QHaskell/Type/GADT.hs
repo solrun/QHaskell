@@ -13,6 +13,7 @@ data Typ :: * -> * where
   Arr :: Typ ta -> Typ tb -> Typ (ta -> tb)
   Tpl :: Typ tf -> Typ ts -> Typ (tf , ts)
   TVr :: Nat a  -> Typ (TVr a)
+  May :: Typ t  -> Typ (Maybe t)
 
 deriving instance Show (Typ t)
 
@@ -36,6 +37,9 @@ instance (Type tf , Type ts) => HasSin Typ (tf , ts) where
 
 instance (HasSin Nat x) => HasSin Typ (TVr x) where
   sin = TVr sin
+
+instance (Type tm) => HasSin Typ (Maybe tm) where
+  sin = May sin
 
 instance EqlSin Typ where
   eqlSin Wrd         Wrd           = return Rfl

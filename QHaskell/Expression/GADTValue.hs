@@ -1,10 +1,10 @@
 module QHaskell.Expression.GADTValue
     (Exp(..)
-    ,conI,conB,conF,prm,var,abs,app,cnd,tpl,fst,snd,leT,may
+    ,conI,conB,conF,prm,var,abs,app,cnd,tpl,fst,snd,leT,may,non,som
     ,tag,int,mem,fix
     ,getTrm) where
 
-import QHaskell.MyPrelude hiding (abs,fst,snd,tpl,cnd,fix)
+import QHaskell.MyPrelude hiding (abs,fst,snd,tpl,cnd,fix,may)
 import qualified QHaskell.MyPrelude as MP
 import qualified QHaskell.Type.GADT as TG
 import qualified QHaskell.Environment.Typed as ET

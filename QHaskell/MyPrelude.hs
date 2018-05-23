@@ -33,7 +33,7 @@ module QHaskell.MyPrelude
         module Control.Applicative,
         module Control.Monad,
         TVr(..),
-        cnd,tpl,save,fix,
+        cnd,tpl,save,fix,may,
         fixM,trace)
        where
 import Debug.Trace
@@ -85,6 +85,9 @@ cnd c t f = if c then t else f
 
 tpl :: a -> b -> (a , b)
 tpl = ((,))
+
+may :: Maybe a -> b -> (a -> ErrM b) -> ErrM b
+may m d f = maybe (return d) f m
 
 save :: a -> a
 save = id

@@ -13,6 +13,7 @@ data Exp = ConI Word32
          | ConF Float
          | Abs (Exp -> ErrM Exp)
          | Tpl (Exp , Exp)
+         | May (Maybe Exp)
 
 class Lft t where
   lft :: t -> Exp
@@ -130,6 +131,13 @@ fst _       = badTypValM
 snd :: Exp -> NamM ErrM Exp
 snd (Tpl p) = return (MP.snd p)
 snd _       = badTypValM
+
+undefined = undefined
+
+may :: Exp -> Exp -> Exp -> NamM ErrM Exp
+may (May m) d f = do f' <- lift (toHsk f)
+                     lift (MP.may m d f')
+may _       _ _ = badTypValM
 
 tpl :: Exp -> Exp -> NamM ErrM Exp
 tpl vf vs = return (lft (vf , vs))

@@ -159,7 +159,7 @@ mgu _            _              = case obvious :: Mgu a a' :~:
 case_Mgu :: TG.Typ b -> TG.Typ b' -> SMaybe (Env (SPair NG.Nat TG.Typ)) s ->
             SMaybe (Env (SPair NG.Nat TG.Typ)) (Case_Mgu b b' s)
 case_Mgu b b' (SJust s) = fmapAppend s (mgu (subs s b) b')
-case_Mgu _ _  SNothing  = error SNothing
+case_Mgu _ _  SNothing  = SNothing
 
 fmapAppend :: Env f xs -> SMaybe (Env f) mys ->
               SMaybe (Env f) (FMapAppend xs mys)

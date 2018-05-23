@@ -100,4 +100,4 @@ som  = prm1 Just
 
 may  :: Exp (Maybe a) ->
         Exp b -> Exp (a -> b) -> Exp b
-may  = prm3 MP.may
+may m d f = prm3 MP.maybe d f m

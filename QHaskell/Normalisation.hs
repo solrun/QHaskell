@@ -67,7 +67,7 @@ nrmOne b ee = let t = sin :: TG.Typ a in case ee of
     May (NV em) en      es | b   -> chg (LeT em (May (Var Zro)   (sucAll en) (sucAll es)))
     May (V  em) (NV en) es | b   -> chg (LeT en (May (sucAll em) (Var Zro)   (sucAll es)))
     May (V  em) (V  en) (NV es) | b -> chg (LeT es (May (sucAll em) (sucAll en) (Var Zro)))
-    May (TF Non) en      _ | b   -> chg en
+    May (TF Non) en      _       -> chg en
     May (TF (Som e)) _       es  -> chg (App es e)
 
     LeT (TF (LeT (NV el') eb'))  eb | b  -> chg (LeT el' (LeT eb' (replaceOne eb)))

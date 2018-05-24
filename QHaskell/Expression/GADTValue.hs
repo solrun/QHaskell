@@ -4,7 +4,7 @@ module QHaskell.Expression.GADTValue
     ,tag,int,mem,fix
     ,getTrm) where
 
-import QHaskell.MyPrelude hiding (abs,fst,snd,tpl,cnd,fix,may)
+import QHaskell.MyPrelude hiding (abs,fst,snd,tpl,cnd,fix,may,non,som)
 import qualified QHaskell.MyPrelude as MP
 import qualified QHaskell.Type.GADT as TG
 import qualified QHaskell.Environment.Typed as ET

@@ -23,10 +23,11 @@ instance (m ~ m' , n ~ n') =>
     AUD.App ef ea     -> GTD.App  <$> pure Nothing  <*> cnvWth r ef <*> cnvWth r ea
     AUD.Fst e         -> GTD.Fst  <$> pure Nothing  <*> cnvWth r e
     AUD.Snd e         -> GTD.Snd  <$> pure Nothing  <*> cnvWth r e
+    AUD.May em en es  -> GTD.May  <$> pure Nothing  <*> cnvWth r em <*> cnvWth r en <*> cnvWth r es
     AUD.LeT el eb     -> GTD.LeT  <$> pure Nothing  <*> cnvWth r el <*> cnvWth r eb
     AUD.Typ t  e      -> GTD.Typ  <$> pure (Just t) <*> cnvWth r e
     _                  -> $(biGenOverloadedM 'ee ''AUD.Exp "GTD"
-     ['AUD.App,'AUD.Fst,'AUD.Snd,'AUD.Prm,'AUD.Var,
+     ['AUD.App,'AUD.Fst,'AUD.Snd,'AUD.May,'AUD.Prm,'AUD.Var,
       'AUD.LeT,'AUD.Typ] (const [| cnvWth r |]))
 
 instance (m ~ m' , n ~ n') =>

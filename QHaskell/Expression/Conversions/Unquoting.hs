@@ -35,6 +35,10 @@ instance Cnv (DTH.MExp , r) (AUN.Exp TH.Name) where
     DTH.MConE n
       | n === 'True         -> pure (AUN.ConB True)
       | n === 'False        -> pure (AUN.ConB False)
+      | n === 'Nothing      -> pure AUN.Non
+      | n === 'Just         -> do v1 <- newTHVar
+                                  pure (AUN.Abs (v1 ,
+                                        AUN.Som (AUN.Var v1)))
       | n === '(,)          -> do vv1 <- newTHVar
                                   vv2 <- newTHVar
                                   pure (AUN.Abs (vv1 ,
@@ -76,6 +80,16 @@ instance Cnv (DTH.MExp , r) (AUN.Exp TH.Name) where
                    (DTH.DConPa m [] , er)]
          | m === 'False,
            n === 'True  -> AUN.Cnd  <$> cnvWth r ec <*> cnvWth r el <*> cnvWth r er
+    DTH.MCaseE ec [(DTH.DConPa nl [] , el),
+                   (DTH.DConPa nr [DTH.DVarPa xr] , er)]
+        | nl === 'Nothing ,
+          nr === 'Just  -> AUN.May <$> cnvWth r ec <*> cnvWth r el <*>
+                           cnvWth r (DTH.MLamE xr er)
+    DTH.MCaseE ec [(DTH.DConPa nl [DTH.DVarPa xr] , el),
+                   (DTH.DConPa nr [] , er)]
+        | nr === 'Nothing ,
+          nl === 'Just  -> AUN.May <$> cnvWth r ec <*> cnvWth r er <*>
+                           cnvWth r (DTH.MLamE xr el)
     DTH.MCaseE _ _      -> fail "case expression form is not supported!"
 
 instance Cnv ((TH.Name , DTH.MExp) , r) (TH.Name , AUN.Exp TH.Name) where

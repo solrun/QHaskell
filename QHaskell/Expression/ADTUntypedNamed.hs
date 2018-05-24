@@ -15,6 +15,9 @@ data Exp x = ConI Word32
            | Tpl (Exp x) (Exp x)
            | Fst (Exp x)
            | Snd (Exp x)
+           | Non
+           | Som (Exp x)
+           | May (Exp x) (Exp x) (Exp x)
            | LeT (Exp x) (x , Exp x)
            | Typ TA.Typ (Exp x)
            | Int Word32

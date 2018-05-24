@@ -8,7 +8,7 @@ import QHaskell.Expression.GADTFirstOrder as GFO
 import QHaskell.Variable.Typed
 import QHaskell.Expression.Utils.Common
 import QHaskell.Singleton
-import QHaskell.Type.GADT hiding (Tpl)
+import QHaskell.Type.GADT hiding (Tpl,May)
 import qualified QHaskell.Environment.Typed as ET
 
 
@@ -112,6 +112,9 @@ isVal ee = case ee of
     Tpl  ef es    -> isVal ef && isVal es
     Fst  _        -> False
     Snd  _        -> False
+    Non           -> True
+    Som  e        -> isVal e
+    May  _ _  _   -> False
     LeT  _  _     -> False
     Int _         -> True -- shouldn't matter
     Tag _ e       -> isVal e

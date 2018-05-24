@@ -16,10 +16,11 @@ instance Cnv (Exp m n t , (Env m FAV.Exp , Env n FAV.Exp)) FAV.Exp where
     App _  ef ea -> FAV.app  <$> cnv (ef , r) <*> cnv (ea , r)
     Fst _  e     -> FAV.fst  <$> cnv (e , r)
     Snd _  e     -> FAV.snd  <$> cnv (e , r)
+    May _ l m n  -> FAV.may  <$> cnv (l , r) <*> cnv (m , r) <*> cnv (n , r)
     LeT _  el eb -> FAV.leT  <$> cnv (el , r) <*> cnv (eb , r)
     Typ _ e      -> pure (cnv (e , r))
     _ -> $(biGenOverloadedML 'ee ''Exp "FAV"
-     ['Prm,'Var,'App,'Fst,'Snd,'LeT,'Typ]
+     ['Prm,'Var,'App,'Fst,'Snd,'May,'LeT,'Typ]
       (const [| \ e -> cnv (e , r) |])))
 
 instance Cnv (Exp m (Suc n) a , (Env m FAV.Exp , Env n FAV.Exp)) (FAV.Exp -> FAV.Exp) where

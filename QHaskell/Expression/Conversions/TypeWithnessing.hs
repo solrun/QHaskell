@@ -72,6 +72,19 @@ instance (s ~ s' , g ~ g' , m ~ (Len s) , n ~ (Len g) , TG.Type a) =>
                            e'         <- cnvWth r e
                            GFO.Snd <$> pure
                                     (samTyp (TG.Tpl tf' t) e')
+    GTD.May tm em en es -> do ExsSin t' :: ExsTyp <- cnv tm
+                              PrfHasSin <- getPrfHasSinM t'
+                              em' <- cnvWth r em
+                              GFO.May <$> pure (samTyp (TG.May t') em')
+                                      <*> cnvWth r en <*> cnvWth r es
+    GTD.Non          -> case t of
+     TG.May _        -> case TG.getPrfHasSinMay t of
+      PrfHasSin       -> pure GFO.Non
+     _                -> fail ("Type Error!\n" ++ show ee ++ " :: " ++ show t)
+    GTD.Som e        -> case t of
+     TG.May _        -> case TG.getPrfHasSinMay t of
+      PrfHasSin       -> GFO.Som <$> cnvWth r e
+     _                -> fail ("Type Error!\n" ++ show ee ++ " :: " ++ show t)
     GTD.LeT tl el eb -> do ExsSin tl' :: ExsTyp <- cnv tl
                            PrfHasSin <- getPrfHasSinM tl'
                            GFO.LeT <$> cnvWth r el <*> cnvWth r (tl' , eb)

@@ -82,6 +82,11 @@ getPrfHasSinTpl :: forall tf ts t. Type (tf , ts) =>
 getPrfHasSinTpl _ = case sin :: Typ (tf , ts) of
   Tpl tf ts -> (getPrfHasSin tf , getPrfHasSin ts)
 
+getPrfHasSinMay :: forall ta t. Type (Maybe ta) =>
+                   t (Maybe ta) -> PrfHasSin Typ ta
+getPrfHasSinMay _ = case sin :: Typ (Maybe ta) of
+  May ta    -> getPrfHasSin ta
+
 getPrfHasSinArrM :: Type (ta -> tb) =>
                     t (ta -> tb) -> ErrM (PrfHasSin Typ ta , PrfHasSin Typ tb)
 getPrfHasSinArrM = return . getPrfHasSinArr

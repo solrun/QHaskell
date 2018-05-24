@@ -1,10 +1,10 @@
 module QHaskell.Expression.ADTValue
     (Exp
-    ,conI,conB,conF,prm,var,abs,app,cnd,tpl,fst,snd,leT,may
+    ,conI,conB,conF,prm,var,abs,app,cnd,tpl,fst,snd,leT,may,non,som
     ,typ,int,mem,fix
     ,Lft(..),CoLft(..)) where
 
-import QHaskell.MyPrelude hiding (abs,fst,snd,tpl,cnd,fix,may)
+import QHaskell.MyPrelude hiding (abs,fst,snd,tpl,cnd,fix,may,non,som)
 import qualified QHaskell.MyPrelude as MP
 import qualified QHaskell.Type.ADT as TA
 
@@ -35,6 +35,9 @@ instance (CoLft a , Lft b) => Lft (a -> b) where
 
 instance (Lft a , Lft b) => Lft (a , b) where
   lft (x , y) = Tpl (lft x , lft y)
+
+instance (Lft a) => Lft (Maybe a) where
+  lft mx  = May (fmap lft mx)
 
 class CoLft t where
   colft :: Exp -> ErrM t
@@ -90,11 +93,11 @@ prm f (x : xs) =  do f' <- app f x
 prm0 :: Lft a => a -> ErrM Exp
 prm0 = return . lft
 
-{-
 prm1 :: (ToHsk a , Lft b) => (a -> b) -> Exp -> ErrM Exp
 prm1 f x = do x' <- toHsk x
               return (lft (f x'))
 
+{-
 prm2 :: (ToHsk a,ToHsk b,Lft c) => (a -> b -> c) -> Exp -> Exp -> ErrM Exp
 prm2 f x y = do x' <- toHsk x
                 y' <- toHsk y
@@ -132,7 +135,12 @@ snd :: Exp -> NamM ErrM Exp
 snd (Tpl p) = return (MP.snd p)
 snd _       = badTypValM
 
-undefined = undefined
+non :: NamM ErrM Exp
+non  = return (May MP.non)
+
+som :: Exp -> NamM ErrM Exp
+som x  = return (lft (MP.som x))
+--som  = lift . prm1 (Just :: Exp -> Maybe Exp)
 
 may :: Exp -> Exp -> Exp -> NamM ErrM Exp
 may (May m) d f = do f' <- lift (toHsk f)

@@ -4,7 +4,7 @@ import QHaskell.MyPrelude
 
 import QHaskell.Nat.ADT
 import qualified QHaskell.Type.Herbrand as TH
-import QHaskell.Type.Herbrand hiding (Tpl,App)
+import QHaskell.Type.Herbrand hiding (Tpl,App,May)
 import QHaskell.Solver
 import QHaskell.Conversion
 import QHaskell.Nat.Conversion ()
@@ -112,6 +112,18 @@ collect ee (s , g) = case ee of
                          addC (te :~: TH.Tpl tf ts)
                          addC (t  :~: tf)
                          return ts
+    Non            -> do t <- newMT
+                         return (TH.May t)
+    Som e          -> do t   <- collect e (s , g)
+                         return (TH.May t)
+    May t em en es -> do tm  <- collect em (s , g)
+                         tn  <- collect en (s , g)
+                         ts  <- collect es (s , g)
+                         ta  <- newMT
+                         addC (tm :~: TH.May ta)
+                         addC (ts :~: Arr ta tn)
+                         addC (t  :~: ta)
+                         return tn
     LeT t  el eb   -> do tl  <- collect el (s , g)
                          tb  <- collect eb (s , Ext tl g)
                          addC (t :~: tl)

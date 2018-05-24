@@ -17,6 +17,9 @@ data Exp :: NA.Nat -> NA.Nat -> * -> * where
   Tpl  :: Exp n m t -> Exp n m t -> Exp n m t
   Fst  :: t -> Exp n m t -> Exp n m t
   Snd  :: t -> Exp n m t -> Exp n m t
+  Non  :: Exp n m t
+  Som  :: Exp n m t -> Exp n m t
+  May  :: t -> Exp n m t -> Exp n m t -> Exp n m t -> Exp n m t
   LeT  :: t -> Exp n m t -> Exp n (NA.Suc m) t -> Exp n m t
   Typ  :: t -> Exp n m t -> Exp n m t
   Int  :: Word32 -> Exp n m t

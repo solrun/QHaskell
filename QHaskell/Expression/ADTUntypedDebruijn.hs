@@ -21,6 +21,9 @@ data Exp = ConI Word32
          | Tpl  Exp Exp
          | Fst  Exp
          | Snd  Exp
+         | Non
+         | Som  Exp
+         | May  Exp Exp Exp
          | LeT  Exp Fun
          | Typ  TA.Typ Exp
          | Int  Word32

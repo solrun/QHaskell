@@ -75,7 +75,6 @@ nrmOne b ee = let t = sin :: TG.Typ a in case ee of
     LeT (V v)               eb   -> chg (sbs v eb)
     LeT (NV v)         eb
       | cntVar Zro eb == 0       -> chg (sbs v eb)
-      | cntVar Zro eb == 1       -> chg (sbs v eb)
 
     Int i                        -> case t of
       TG.Wrd                    -> chg (ConI i)

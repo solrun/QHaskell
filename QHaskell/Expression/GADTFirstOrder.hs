@@ -14,10 +14,10 @@ data Exp :: [*] -> [*] -> * -> * where
   Var  :: Var g a  -> Exp s g a
   Prm  :: (Match a as b , Types as) =>
           Var s a -> Env (Exp s g) as -> Exp s g b
-  Abs  :: Exp s (a ': g) b -> Exp s g (a -> b)
+  Abs  :: (Type a, Type b) => Exp s (a ': g) b -> Exp s g (a -> b)
   App  :: Type a =>
           Exp s g (a -> b) -> Exp s g a -> Exp s g b
-  Cnd  :: Exp s g Bool -> Exp s g a -> Exp s g a -> Exp s g a
+  Cnd  :: Type a => Exp s g Bool -> Exp s g a -> Exp s g a -> Exp s g a
   Tpl  :: Exp s g a -> Exp s g b -> Exp s g (a , b)
   Fst  :: Type b => Exp s g (a , b) -> Exp s g a
   Snd  :: Type a => Exp s g (a , b) -> Exp s g b
